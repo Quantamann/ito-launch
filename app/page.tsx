@@ -59,16 +59,16 @@ export default function Home() {
         
         {/* Layer 1: Background Text */}
         <div className="absolute inset-0 z-0 pointer-events-none flex flex-col justify-between py-32 md:py-0 md:block">
-          <h1 className="md:absolute md:top-20 md:left-16 px-4 md:px-0 text-7xl sm:text-8xl md:text-[10.5rem] font-normal tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-[#800000] to-[#d97373] leading-none">
+          <h1 className="md:absolute md:top-35 md:left-16 px-4 md:px-0 text-7xl sm:text-8xl md:text-[10rem] font-normal tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-[#800000] to-[#d97373] leading-none">
             Coming
           </h1>
-          <h1 className="md:absolute md:bottom-24 md:right-16 px-4 md:px-0 text-right text-7xl sm:text-8xl md:text-[13rem] font-normal tracking-tighter text-transparent bg-clip-text bg-gradient-to-tl from-[#800000] to-[#d97373] leading-none">
+          <h1 className="md:absolute md:bottom-32 md:right-8 px-4 md:px-0 text-right text-7xl sm:text-8xl md:text-[10rem] font-normal tracking-tighter text-transparent bg-clip-text bg-gradient-to-tl from-[#800000] to-[#d97373] leading-none">
             together.
           </h1>
         </div>
 
         {/* Layer 2: Shatter Component */}
-        <div className="absolute inset-0 z-10 opacity-85">
+        <div className="absolute inset-0 z-10 opacity-75">
           <ShatterReveal 
             style={{ width: "100%", height: "100%" }}
             image="images/pattern.png" 
@@ -95,7 +95,7 @@ export default function Home() {
         
         {/* Layer 3: Progress Indicator UI (Hidden on mobile to make room for email bar) */}
         <div className="hidden md:block absolute bottom-8 left-8 bg-white/80 p-4 rounded-xl backdrop-blur-md z-20 pointer-events-none">
-          <p className="text-sm font-mono text-black">42% ASSEMBLED</p>
+          <p className="text-sm font-mono text-black">45% ASSEMBLED</p>
           <p className="text-xs text-gray-700 mt-1">Every sign-up moves a piece.</p>
         </div>
 
