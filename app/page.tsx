@@ -8,12 +8,15 @@ import SectionSnap from '../components/SectionSnap';
 export default function Home() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     
     setStatus('loading');
+    setErrorMessage('');
+    
     try {
       const res = await fetch('/api/waitlist', {
         method: 'POST',
@@ -21,10 +24,18 @@ export default function Home() {
         body: JSON.stringify({ email })
       });
       
-      if (res.ok) setStatus('success');
-      else setStatus('error');
+      const data = await res.json();
+      
+      if (data.success) {
+        setStatus('success');
+        setEmail(''); // Clear the input field
+      } else {
+        setStatus('error');
+        setErrorMessage(data.error || 'Something went wrong. Please try again.');
+      }
     } catch (err) {
       setStatus('error');
+      setErrorMessage('Failed to connect to the server.');
     }
   };
 
