@@ -1,4 +1,5 @@
 "use client";
+import Image from 'next/image';
 import ShatterReveal from '../components/ShatterReveal';
 import LaunchCountdown from '../components/LaunchCountdown';
 import SectionSnap from '../components/SectionSnap';
@@ -6,6 +7,18 @@ import SectionSnap from '../components/SectionSnap';
 export default function Home() {
   return (
     <main className="bg-[#f2efe9] text-[#0e0e0e] font-sans">
+      <div className="absolute top-8 left-8 md:top-12 md:left-12 flex items-center gap-3 z-50 pointer-events-none">
+        <Image
+          src="/Logo.png" 
+          alt="ito logo"
+          width={48}
+          height={48}
+          className="w-10 h-10 md:w-12 md:h-12 object-contain"
+        />
+        <h1 className="text-3xl md:text-4xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#800000] to-[#d97373]">
+          ito
+        </h1>
+      </div>
       <SectionSnap 
         sections="hero, features, countdown" 
         freeAfter="footer" 
