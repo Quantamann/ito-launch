@@ -1,17 +1,40 @@
 "use client";
+import { useState } from 'react';
 import Image from 'next/image';
 import ShatterReveal from '../components/ShatterReveal';
 import LaunchCountdown from '../components/LaunchCountdown';
 import SectionSnap from '../components/SectionSnap';
 
 export default function Home() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      
+      if (res.ok) setStatus('success');
+      else setStatus('error');
+    } catch (err) {
+      setStatus('error');
+    }
+  };
+
   return (
-    <main className="bg-[#f2efe9] text-[#0e0e0e] font-sans">
+    <main className="bg-[#f2efe9] text-[#0e0e0e] font-sans relative">
       
       {/* Top Left Logo & Text Anchor */}
       <div className="absolute top-6 left-6 md:top-12 md:left-12 flex items-center gap-3 z-50 pointer-events-none">
         <Image
-          src="/logo.png" 
+          src="/Logo.png" 
           alt="ito logo"
           width={48}
           height={48}
@@ -34,19 +57,17 @@ export default function Home() {
       {/* Hero Section */}
       <section id="hero" className="relative w-full h-screen overflow-hidden bg-[#f2efe9]">
         
-        {/* Layer 1: Background Text (Behind the shatter) */}
+        {/* Layer 1: Background Text */}
         <div className="absolute inset-0 z-0 pointer-events-none flex flex-col justify-between py-32 md:py-0 md:block">
-          {/* Top Left */}
-          <h1 className="md:absolute md:top-20 md:left-16 px-4 md:px-0 text-7xl sm:text-8xl md:text-[13rem] font-normal tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-[#800000] to-[#d97373] leading-none">
+          <h1 className="md:absolute md:top-20 md:left-16 px-4 md:px-0 text-7xl sm:text-8xl md:text-[10.5rem] font-normal tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-[#800000] to-[#d97373] leading-none">
             Coming
           </h1>
-          {/* Bottom Right */}
           <h1 className="md:absolute md:bottom-24 md:right-16 px-4 md:px-0 text-right text-7xl sm:text-8xl md:text-[13rem] font-normal tracking-tighter text-transparent bg-clip-text bg-gradient-to-tl from-[#800000] to-[#d97373] leading-none">
             together.
           </h1>
         </div>
 
-        {/* Layer 2: Shatter Component (On top of text) */}
+        {/* Layer 2: Shatter Component */}
         <div className="absolute inset-0 z-10 opacity-85">
           <ShatterReveal 
             style={{ width: "100%", height: "100%" }}
@@ -72,10 +93,40 @@ export default function Home() {
           />
         </div>
         
-        {/* Layer 3: Progress Indicator UI */}
-        <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 bg-white/80 p-3 md:p-4 rounded-xl backdrop-blur-md z-20 pointer-events-none">
-          <p className="text-xs md:text-sm font-mono text-black">42% ASSEMBLED</p>
-          <p className="text-[10px] md:text-xs text-gray-700 mt-1">Every sign-up moves a piece.</p>
+        {/* Layer 3: Progress Indicator UI (Hidden on mobile to make room for email bar) */}
+        <div className="hidden md:block absolute bottom-8 left-8 bg-white/80 p-4 rounded-xl backdrop-blur-md z-20 pointer-events-none">
+          <p className="text-sm font-mono text-black">42% ASSEMBLED</p>
+          <p className="text-xs text-gray-700 mt-1">Every sign-up moves a piece.</p>
+        </div>
+
+        {/* Layer 4: Floating Hero Email Capture */}
+        <div className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 w-[90%] max-w-lg z-30">
+          <form 
+            onSubmit={handleSubmit}
+            className="flex w-full bg-white/80 backdrop-blur-md p-1.5 rounded-full shadow-2xl border border-white/60"
+          >
+            <input 
+              type="email" 
+              placeholder="Your email address" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={status === 'loading' || status === 'success'}
+              required
+              className="flex-1 bg-transparent text-black placeholder-gray-500 px-6 outline-none disabled:opacity-50" 
+            />
+            <button 
+              type="submit"
+              disabled={status === 'loading' || status === 'success'}
+              className="bg-[#0e0e0e] text-white px-6 py-3 md:px-8 md:py-4 rounded-full font-medium flex items-center justify-center gap-2 hover:bg-black/80 transition-colors disabled:opacity-50 whitespace-nowrap"
+            >
+              {status === 'loading' ? 'Saving...' : status === 'success' ? 'Saved ✓' : 'Notify me →'}
+            </button>
+          </form>
+          {status === 'error' && (
+            <p className="text-red-500 text-sm mt-3 text-center font-medium bg-white/80 rounded-full py-1 backdrop-blur-sm">
+              Something went wrong. Please try again.
+            </p>
+          )}
         </div>
       </section>
 
@@ -119,16 +170,29 @@ export default function Home() {
             />
           </div>
 
-          <div className="mt-8 md:mt-12 flex flex-col md:flex-row w-full md:w-auto bg-transparent md:bg-white/10 md:p-1 gap-3 md:gap-0 rounded-3xl md:rounded-full backdrop-blur-md md:border md:border-white/20">
+          {/* Secondary Email Capture Form (Linked to same state) */}
+          <form 
+            onSubmit={handleSubmit}
+            className="mt-8 md:mt-12 flex w-full max-w-lg bg-white/10 p-1 rounded-full backdrop-blur-md border border-white/20"
+          >
             <input 
               type="email" 
               placeholder="Your email address" 
-              className="bg-white/10 md:bg-transparent text-white px-6 py-4 md:py-3 rounded-full md:rounded-none outline-none w-full md:w-64 border border-white/20 md:border-none focus:bg-white/20 transition-colors" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={status === 'loading' || status === 'success'}
+              required
+              className="flex-1 bg-transparent text-white placeholder-gray-300 px-6 outline-none disabled:opacity-50" 
             />
-            <button className="bg-white text-black px-6 py-4 md:py-3 rounded-full font-medium w-full md:w-auto hover:bg-gray-200 transition-colors">
-              Save my spot →
+            <button 
+              type="submit"
+              disabled={status === 'loading' || status === 'success'}
+              className="bg-white text-black px-6 py-3 md:px-8 md:py-3 rounded-full font-medium whitespace-nowrap hover:bg-gray-200 transition-colors disabled:opacity-50"
+            >
+              {status === 'loading' ? 'Saving...' : status === 'success' ? 'Saved ✓' : 'Notify me →'}
             </button>
-          </div>
+          </form>
+          {status === 'error' && <p className="text-red-400 text-sm mt-3">Something went wrong.</p>}
         </div>
       </section>
 
@@ -137,8 +201,8 @@ export default function Home() {
         <div className="flex flex-col md:flex-row justify-between items-start gap-6 md:gap-0">
           <h2 className="text-3xl md:text-5xl font-light">Follow the making.</h2>
           <div className="flex gap-3 md:gap-4">
-            <button className="px-4 py-2 bg-white rounded-full text-xs md:text-sm border border-gray-200">Instagram ↗</button>
-            <button className="px-4 py-2 bg-white rounded-full text-xs md:text-sm border border-gray-200">X ↗</button>
+            <button className="px-4 py-2 bg-white rounded-full text-xs md:text-sm border border-gray-200 hover:bg-gray-50 transition-colors">Instagram ↗</button>
+            <button className="px-4 py-2 bg-white rounded-full text-xs md:text-sm border border-gray-200 hover:bg-gray-50 transition-colors">X ↗</button>
           </div>
         </div>
         
@@ -152,7 +216,7 @@ export default function Home() {
             <p>tryito.in</p>
             <p>Privacy</p>
           </div>
-          <p className="cursor-pointer">Back to top ↑</p>
+          <p className="cursor-pointer hover:text-gray-800 transition-colors">Back to top ↑</p>
         </div>
       </section>
     </main>
