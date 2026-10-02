@@ -96,7 +96,7 @@ export default function Home() {
             float={1}
             edges={true}
             shadows={true}
-            revealOn="Submit"
+            
             clickBurst={true}
             revealed={false}
             hoverCursor={true}
