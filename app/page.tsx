@@ -217,9 +217,19 @@ export default function Home() {
           </div>
         </div>
         
-        <h1 className="text-[10rem] md:text-[20rem] font-bold tracking-tighter text-[#0e0e0e] leading-none mt-12 md:mt-12 -ml-2 md:ml-0">
-          ito
-        </h1>
+        {/* Massive Footer Logo & Text */}
+        <div className="flex items-center mt-12 md:mt-12 -ml-2 md:ml-0">
+          <h1 className="text-[10rem] md:text-[20rem] font-bold tracking-tighter text-[#0e0e0e] leading-none">
+            ito
+          </h1>
+          <Image
+            src="/Logo.png" 
+            alt="ito logo tall"
+            width={300}
+            height={300}
+            className="w-auto h-[7.5rem] md:h-[15rem] ml-4 md:ml-10 object-contain"
+          />
+        </div>
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-t border-gray-300 pt-6 md:pt-8 mt-8 md:mt-12 text-xs md:text-sm text-gray-500 gap-4 md:gap-0">
           <div className="flex gap-4 md:gap-8">
