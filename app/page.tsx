@@ -225,9 +225,9 @@ export default function Home() {
           <Image
             src="/Logo.png" 
             alt="ito logo tall"
-            width={300}
-            height={300}
-            className="w-auto h-[7.5rem] md:h-[15rem] ml-4 md:ml-10 object-contain"
+            width={500}
+            height={500}
+            className="w-auto h-[12rem] md:h-[32rem] ml-4 md:ml-15 object-contain"
           />
         </div>
         
